@@ -4,7 +4,7 @@ An AI-powered application that generates structured learning content based on to
 
 ## Features ✨
 
-- 🤖 AI-powered content generation using GPT-2
+- 🤖 AI-powered content generation using Groq API
 - 📊 Multiple difficulty levels (Beginner, Intermediate, Advanced)
 - 💡 Real-world examples generation
 - ❓ Interactive quiz generation
@@ -17,6 +17,7 @@ An AI-powered application that generates structured learning content based on to
 ### Prerequisites
 - Python 3.8 or higher
 - pip package manager
+- Groq API key (get it from [https://console.groq.com](https://console.groq.com))
 
 ### Setup Steps
 
@@ -85,7 +86,7 @@ streamlit run app/streamlit_app.py
 
 ### Content Generation
 - Generates structured explanations based on difficulty level
-- Uses GPT-2 model with fallback content
+- Uses Groq API with fallback content
 - Customized prompts for each difficulty level
 
 ### Example Generation
@@ -103,6 +104,14 @@ streamlit run app/streamlit_app.py
 - **PDF**: Professional formatted documents
 
 ## Customization 🎨
+
+### Setting up Groq API
+1. Get your API key from [Groq Cloud Console](https://console.groq.com)
+2. Create a `.env` file in the project root
+3. Add your API key:
+```
+GROQ_API_KEY=your_actual_api_key_here
+```
 
 ### Modifying Prompts
 Edit `content_generator.py` to customize prompts:

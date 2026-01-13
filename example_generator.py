@@ -1,10 +1,45 @@
+import os
+from groq import Groq
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
+
 class ExampleGenerator:
+    def __init__(self):
+        self.client = Groq(api_key=os.environ.get("GROQ_API_KEY"))
+    
     def generate_examples(self, topic, level="Beginner"):
-        """Generate real-world examples quickly using templates (no heavy models)."""
-        return self._fallback_examples(topic, level)
+        """Generate real-world examples using Groq API."""
+        try:
+            # Define prompt based on difficulty level
+            prompts = {
+                "Beginner": f"Generate 3 simple, relatable real-world examples of {topic} that a beginner can easily understand. Focus on everyday applications and simple scenarios that connect to common experiences.",
+                "Intermediate": f"Generate 3 industry-relevant real-world examples of {topic} that demonstrate professional applications and technical implementations. Show how {topic} is used in business and technology contexts.",
+                "Advanced": f"Generate 3 cutting-edge, advanced real-world examples of {topic} that highlight research applications, innovative implementations, and frontier technologies. Focus on advanced use cases and emerging trends."
+            }
+            
+            prompt = prompts.get(level, prompts["Beginner"])
+            
+            chat_completion = self.client.chat.completions.create(
+                messages=[
+                    {
+                        "role": "user",
+                        "content": prompt,
+                    }
+                ],
+                model="llama-3.1-8b-instant",  # Using Llama 3.1 model
+            )
+            
+            return chat_completion.choices[0].message.content
+        except Exception as e:
+            # Fallback to original examples if API fails
+            print(f"Error generating examples with Groq: {e}")
+            return self._fallback_examples(topic, level)
     
     def _fallback_examples(self, topic, level):
         """Fallback examples when model is unavailable"""
+        
         examples = {
             "Beginner": f"""Real-World Examples of {topic}:
 
@@ -30,4 +65,3 @@ class ExampleGenerator:
 
 3. Innovation Frontier: Research institutions use {topic} in breakthrough applications like drug discovery, climate modeling, and artificial intelligence, pushing the boundaries of what's computationally possible."""
         }
-        return examples.get(level, examples["Beginner"])
